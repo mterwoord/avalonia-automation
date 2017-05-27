@@ -1,0 +1,12 @@
+﻿<Window xmlns="https://github.com/avaloniaui" MinWidth="500" MinHeight="300" Title="Our Mainwindow!">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+    
+        <TextBlock Grid.Row="0" Background="CornFlowerBlue" Text="{Binding Message}"/>
+
+        <Button Grid.Row="1" Command="{Binding TestCommand}">TestButton</Button>
+    </Grid>
+</Window>
