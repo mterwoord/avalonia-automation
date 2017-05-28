@@ -1,4 +1,6 @@
-﻿namespace AvaloniaExtension.Data
+﻿using AvaloniaExtension.Data.Patterns;
+
+namespace AvaloniaExtension.Data
 {
     public class AutomationElementInfo
     {
@@ -27,6 +29,12 @@
         }
 
         public double PositionOnDesktopY
+        {
+            get;
+            set;
+        }
+
+        public InvokePatternInfo InvokePattern
         {
             get;
             set;

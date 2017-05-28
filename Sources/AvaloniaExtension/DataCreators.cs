@@ -2,6 +2,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using AvaloniaExtension.Data;
+using AvaloniaExtension.Data.Patterns;
 
 namespace AvaloniaExtension
 {
@@ -34,6 +35,12 @@ namespace AvaloniaExtension
             var xStartPos = control.PointToScreen(new Point(0, 0));
             xResultItem.PositionOnDesktopX = xStartPos.X;
             xResultItem.PositionOnDesktopY = xStartPos.Y;
+
+            var xButton = control as Button;
+            if (xButton != null)
+            {
+                xResultItem.InvokePattern = new InvokePatternInfo();
+            }
 
             return xResultItem;
         }

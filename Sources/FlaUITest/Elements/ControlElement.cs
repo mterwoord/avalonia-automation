@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using AvaloniaExtension.Data;
 using FlaUI.Core;
 using FlaUI.Core.AutomationElements.Infrastructure;
@@ -8,13 +9,14 @@ using FlaUI.Core.EventHandlers;
 using FlaUI.Core.Identifiers;
 using FlaUI.Core.Shapes;
 using FlaUITest.FlaUIExt;
+using FlaUITest.Patterns;
 
 namespace FlaUITest.Elements
 {
     public class ControlElement: BaseElement
     {
-        private readonly AutomationElementInfo mInfo;
-        private readonly WindowInfo mParentWindow;
+        internal readonly AutomationElementInfo mInfo;
+        internal readonly WindowInfo mParentWindow;
         private readonly ConditionBase mFindCondition;
 
         public ControlElement(WindowInfo parentWindow, ConditionBase findCondition, AutomationElementInfo info, OurAutomation automation): base(automation)
@@ -22,6 +24,7 @@ namespace FlaUITest.Elements
             mInfo = info ?? throw new ArgumentNullException(nameof(info));
             mParentWindow = parentWindow ?? throw new ArgumentNullException(nameof(parentWindow));
             mFindCondition = findCondition ?? throw new ArgumentNullException(nameof(findCondition));
+            Patterns = new ControlElementPatterns(this);
         }
 
         public override void SetFocus()
@@ -36,6 +39,13 @@ namespace FlaUITest.Elements
 
         protected override object InternalGetPattern(int patternId, bool cached)
         {
+            switch (patternId)
+            {
+                case PatternIds.InvokeId:
+                    return new OurInvokePatternImpl();
+                default:
+                    throw new Exception($"Pattern #{patternId} not implemented!");
+            }
             throw new NotImplementedException();
         }
 
@@ -113,9 +123,31 @@ namespace FlaUITest.Elements
 
         public override AutomationElementPatternValuesBase Patterns
         {
-            get
+            get;
+        }
+
+
+        internal void Invoke()
+        {
+            Automation.CheckConnected();
+            switch (mFindCondition)
             {
-                throw new NotImplementedException();
+                case PropertyCondition xPropCondition:
+                    if (xPropCondition.PropertyConditionFlags != PropertyConditionFlags.None)
+                    {
+                        throw new NotImplementedException("PropertyConditionFlags not yet implemented!");
+                    }
+
+                    switch (xPropCondition.Property.Id)
+                    {
+                        case AutomationElementIdentifiers.AutomationIdPropertyId:
+                            Automation.Client.InvokeAutomationElementByAutomationIdInWindowController(mParentWindow, (string)xPropCondition.Value);
+                            return;
+                        default:
+                            throw new Exception($"Property '{xPropCondition.Property.Name}' (#{xPropCondition.Property.Id}) not implemented!");
+                    }
+                default:
+                    throw new NotImplementedException();
             }
         }
     }

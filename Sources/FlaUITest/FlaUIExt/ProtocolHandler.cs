@@ -44,5 +44,20 @@ namespace FlaUITest.FlaUIExt
 
             return xResult;
         }
+
+        public void InvokeAutomationElementByAutomationIdInWindowController(WindowInfo window, string automationId)
+        {
+            var xResponse = mClient.GetAsync($"InvokeAutomationElementByAutomationIdInWindow?WindowHandle={window.Handle}&AutomationId={automationId}").Result;
+            if (xResponse.StatusCode == HttpStatusCode.NotFound)
+            {
+                throw new Exception("Control not found!");
+            }
+            var xResult = xResponse.Content.ReadAsStringAsync().Result;
+
+            if (xResult != "OK")
+            {
+                throw new Exception("Something went wrong!");
+            }
+        }
     }
 }

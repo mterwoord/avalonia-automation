@@ -33,8 +33,8 @@ namespace FlaUITest
             {
                 Console.WriteLine("Button found!!");
             }
-            //xButton.Patterns.Invoke.Pattern.Invoke();
-            xButton.Click();
+            xButton.Patterns.Invoke.Pattern.Invoke();
+            //xButton.Click();
         }
     }
 }
