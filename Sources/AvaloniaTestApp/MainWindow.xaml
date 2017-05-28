@@ -7,6 +7,6 @@
     
         <TextBlock Grid.Row="0" Background="CornFlowerBlue" Text="{Binding Message}"/>
 
-        <Button Grid.Row="1" Command="{Binding TestCommand}">TestButton</Button>
+        <Button Grid.Row="1" Command="{Binding TestCommand}" Name="ourButton">TestButton</Button>
     </Grid>
 </Window>

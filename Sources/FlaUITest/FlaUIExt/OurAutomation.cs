@@ -11,7 +11,7 @@ namespace FlaUITest.FlaUIExt
 {
     public class OurAutomation: AutomationBase
     {
-        private ProtocolHandler mClient;
+        internal ProtocolHandler Client;
 
         public OurAutomation(): base(new OurPropertyLibrary(), new OurEventLibrary(), new OurPatternLibrary())
         {
@@ -20,12 +20,12 @@ namespace FlaUITest.FlaUIExt
 
         public void Connect(string url)
         {
-            mClient = new ProtocolHandler(url);
+            Client = new ProtocolHandler(url);
         }
 
-        private void CheckConnected()
+        internal void CheckConnected()
         {
-            if (mClient == null)
+            if (Client == null)
             {
                 throw new InvalidOperationException("Not connected!");
             }
@@ -44,7 +44,7 @@ namespace FlaUITest.FlaUIExt
         public override AutomationElement FromHandle(IntPtr hwnd)
         {
             CheckConnected();
-            var xWinElem = new WindowElement(mClient.GetWindows().Single(i => i.Handle == hwnd.ToInt64()), this);
+            var xWinElem = new WindowElement(Client.GetWindows().Single(i => i.Handle == hwnd.ToInt64()), this);
             return new AutomationElement(xWinElem);
         }
 

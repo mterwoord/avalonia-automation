@@ -11,14 +11,17 @@ using FlaUITest.FlaUIExt;
 
 namespace FlaUITest.Elements
 {
-    public class WindowElement: BaseElement
+    public class ControlElement: BaseElement
     {
-        private readonly WindowInfo mInfo;
+        private readonly AutomationElementInfo mInfo;
+        private readonly WindowInfo mParentWindow;
+        private readonly ConditionBase mFindCondition;
 
-        public WindowElement(WindowInfo info, OurAutomation automation):base(automation)
+        public ControlElement(WindowInfo parentWindow, ConditionBase findCondition, AutomationElementInfo info, OurAutomation automation): base(automation)
         {
-            mInfo = info;
-            //
+            mInfo = info ?? throw new ArgumentNullException(nameof(info));
+            mParentWindow = parentWindow ?? throw new ArgumentNullException(nameof(parentWindow));
+            mFindCondition = findCondition ?? throw new ArgumentNullException(nameof(findCondition));
         }
 
         public override void SetFocus()
@@ -28,13 +31,7 @@ namespace FlaUITest.Elements
 
         protected override object InternalGetPropertyValue(int propertyId, bool cached, bool useDefaultIfNotSupported)
         {
-            switch (propertyId)
-            {
-                case AutomationElementIdentifiers.NamePropertyId:
-                    return mInfo.Title;
-                default:
-                    throw new NotImplementedException("Property '" + propertyId + "' not implemented!");
-            }
+            throw new NotImplementedException();
         }
 
         protected override object InternalGetPattern(int patternId, bool cached)
@@ -49,33 +46,14 @@ namespace FlaUITest.Elements
 
         public override AutomationElement FindFirst(TreeScope treeScope, ConditionBase condition)
         {
-            Automation.CheckConnected();
-            switch (condition)
-            {
-                case PropertyCondition xPropCondition:
-                    if (xPropCondition.PropertyConditionFlags != PropertyConditionFlags.None)
-                    {
-                        throw new NotImplementedException("PropertyConditionFlags not yet implemented!");
-                    }
-
-                    switch (xPropCondition.Property.Id)
-                    {
-                        case AutomationElementIdentifiers.AutomationIdPropertyId:
-                            var xElemInfo = Automation.Client.FindFirstAutomationElementInWindow(mInfo, (string)xPropCondition.Value);
-
-                            return new AutomationElement(new ControlElement(mInfo, condition, xElemInfo, Automation));
-
-                        default:
-                            throw new Exception($"Property '{xPropCondition.Property.Name}' (#{xPropCondition.Property.Id}) not implemented!");
-                    }
-                default:
-                    throw new NotImplementedException();
-            }
+            throw new NotImplementedException();
         }
 
         public override bool TryGetClickablePoint(out Point point)
         {
-            throw new NotImplementedException();
+            point = new Point(x: mInfo.PositionOnDesktopX + mInfo.Width / 2,
+                              y: mInfo.PositionOnDesktopY + mInfo.Height / 2);
+            return true;
         }
 
         public override IAutomationEventHandler RegisterEvent(EventId @event, TreeScope treeScope, Action<AutomationElement, EventId> action)

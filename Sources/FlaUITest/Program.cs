@@ -24,6 +24,17 @@ namespace FlaUITest
             var xProp = xAuto.PropertyLibrary.Element.Name;
             var xWin = xApp.GetMainWindow(xAuto);
             Console.WriteLine("Window title: '{0}'", xWin.Title);
+            var xButton = xWin.FindFirstDescendant(cf => cf.ByAutomationId("ourButton"));
+            if (xButton == null)
+            {
+                Console.WriteLine("Button not found!");
+            }
+            else
+            {
+                Console.WriteLine("Button found!!");
+            }
+            xButton.Patterns.Invoke.Pattern.Invoke();
+            xButton.Click();
         }
     }
 }

@@ -10,7 +10,7 @@ using AvaloniaExtension.Data;
 
 namespace AvaloniaExtension.Controllers
 {
-    public class DebugController
+    public class GetWindowsController
     {
         private string mResult;
 
